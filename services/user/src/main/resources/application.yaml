@@ -1,0 +1,6 @@
+spring:
+  config:
+    import: optional:configserver:http://localhost:2020
+
+  application:
+    name: user-service
