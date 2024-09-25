@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: edit surname column on users table
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table public.users alter column surname drop not null;
