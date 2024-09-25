@@ -6,15 +6,19 @@ import kg.purple.blinkchat.config.JwtService;
 import kg.purple.blinkchat.dto.AuthRequest;
 import kg.purple.blinkchat.dto.AuthResponse;
 import kg.purple.blinkchat.dto.RegisterRequest;
+import kg.purple.blinkchat.dto.UserDto;
 import kg.purple.blinkchat.model.User;
 import kg.purple.blinkchat.repository.UserRepository;
 import kg.purple.blinkchat.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +67,59 @@ public class UserServiceImpl implements UserService {
 		return AuthResponse.builder()
 				.token(token)
 				.build();
+	}
+	
+	@Override
+	public UserDto getUserByUsername(String username) {
+		User user = findUserByUsername(username);
+		
+		return UserDto.builder()
+				.username(user.getUsername())
+				.name(user.getName())
+				.surname(user.getSurname())
+				.build();
+	}
+	
+	@Override
+	@Modifying
+	public UserDto updateUserByUsername(String username, UserDto request) {
+		User user = findUserByUsername(username);
+		
+		if (request != null) {
+			if (request.getName() != null) user.setName(request.getName());
+			if (request.getSurname() != null) user.setSurname(request.getSurname());
+		} else {
+			throw new IllegalArgumentException("Request must not be null");
+		}
+		
+		userRepository.save(user);
+		
+		return UserDto.builder()
+				.username(user.getUsername())
+				.name(user.getName())
+				.surname(user.getSurname())
+				.build();
+	}
+	
+	@Override
+	public void deleteUserByUsername(String username) {
+		userRepository.delete(findUserByUsername(username));
+	}
+	
+	@Override
+	public List<UserDto> getUsersByUsername(String username) {
+		return userRepository.findAllByUsernameContainingIgnoreCase(username)
+				.stream()
+				.map(u -> UserDto.builder()
+						.username(u.getUsername())
+						.surname(u.getSurname())
+						.name(u.getName())
+						.build())
+				.toList();
+	}
+	
+	private User findUserByUsername(String username) {
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new EntityNotFoundException("User not found with username " + username));
 	}
 }
