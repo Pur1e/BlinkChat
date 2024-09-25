@@ -1,4 +1,4 @@
-package kg.purple.blinkchat.user;
+package kg.purple.blinkchat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
