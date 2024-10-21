@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-	@Pattern(regexp = "^[a-zA-Z0-9]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "your username can contains only letters and digits")
 	@Min(value = 3, message = "min 3")
 	@Max(value = 25, message = "max 25")
 	private String username;
 	@Min(value = 8)
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Your password must be at least 8 characters long, include at least one letter and one digit, and contain only letters and digits.")
 	private String password;
+	
 	@NotBlank
-	private String name;
-	private String surname;
+	private String name, surname;
 }

@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: add table user_roles
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    deleteCascade: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    deleteCascade: true
+                    primaryKey: true
+                    nullable: false
+

@@ -1,6 +1,5 @@
 package kg.purple.blinkchat.controller;
 
-import jakarta.validation.Valid;
 import kg.purple.blinkchat.dto.AuthRequest;
 import kg.purple.blinkchat.dto.AuthResponse;
 import kg.purple.blinkchat.dto.RegisterRequest;
@@ -20,7 +19,7 @@ public class AuthenticationController {
 	private final UserService userService;
 	
 	@PostMapping("register")
-	public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
+	public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
 		return ResponseEntity.ok(userService.register(request));
 	}
 	

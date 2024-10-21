@@ -7,7 +7,9 @@ import kg.purple.blinkchat.dto.AuthRequest;
 import kg.purple.blinkchat.dto.AuthResponse;
 import kg.purple.blinkchat.dto.RegisterRequest;
 import kg.purple.blinkchat.dto.UserDto;
+import kg.purple.blinkchat.model.Role;
 import kg.purple.blinkchat.model.User;
+import kg.purple.blinkchat.repository.RoleRepository;
 import kg.purple.blinkchat.repository.UserRepository;
 import kg.purple.blinkchat.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
+	private final RoleRepository roleRepository;
 	
 	@Transactional
 	@Override
@@ -35,12 +39,16 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByUsername(request.getUsername()).isPresent())
 			throw new EntityExistsException("User with username " + request.getUsername() + " already exists");
 		
+		Role userRole = roleRepository.findByName("USER")
+				.orElseThrow(() -> new EntityNotFoundException("Default role not found"));
+		
 		User user = User.builder()
 				.username(request.getUsername())
 				.password(passwordEncoder.encode(request.getPassword()))
 				.name(request.getName())
 				.surname(request.getSurname())
 				.enabled(true)
+				.roles(Set.of(userRole))
 				.build();
 		
 		userRepository.saveAndFlush(user);

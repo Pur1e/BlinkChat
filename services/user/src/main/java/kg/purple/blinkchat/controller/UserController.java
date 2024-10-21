@@ -4,13 +4,14 @@ import kg.purple.blinkchat.dto.UserDto;
 import kg.purple.blinkchat.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+
 public class UserController {
 	
 	private final UserService userService;
@@ -27,13 +28,14 @@ public class UserController {
 		return ResponseEntity.ok(user);
 	}
 	
+	@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@DeleteMapping("/{username}")
 	public ResponseEntity<Void> deleteUser(@PathVariable String username) {
 		userService.deleteUserByUsername(username);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping
+	@GetMapping()
 	public ResponseEntity<List<UserDto>> getUsersByUsername(@RequestParam String username) {
 		List<UserDto> users = userService.getUsersByUsername(username);
 		return ResponseEntity.ok(users);
