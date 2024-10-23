@@ -1,0 +1,57 @@
+user-service/
+//auth
+    •	POST /api/v1/auth/login: аутентификация пользователя
+    •	POST /api/v1/auth/register: регистрация пользователя
+
+//users
+    •	GET /api/v1/users/{username}: получение пользователя по имени
+    •	PATCH /api/v1/users/{username}: обновление пользователя по имени
+    •	DELETE /api/v1/users/{username}: удаление пользователя по имени
+    •	GET /api/v1/users?username={username}: получение списка пользователей по имени
+
+resource-service/
+//resources
+	•	POST /api/resources — Создать новый ресурс (только для Admin и Publisher).
+    •	GET /api/resources — Получить список всех активных ресурсов (доступно для всех).
+    •	GET /api/resources/{id} — Получить информацию о ресурсе по ID.
+    •	PUT /api/resources/{id} — Обновить информацию о ресурсе (только для Admin и Publisher).
+    •	DELETE /api/resources/{id} — Удалить ресурс (только для Admin и Publisher).
+
+//categories
+	•	POST /api/categories — Создать новую категорию.
+	•	GET /api/categories — Получить список всех категорий.
+	•	GET /api/categories/{id} — Получить категорию по ID.
+	•	PUT /api/categories/{id} — Обновить категорию.
+	•	DELETE /api/categories/{id} — Удалить категорию.
+
+booking-service/
+
+	•	POST /api/bookings — Создать бронирование ресурса.
+	•	GET /api/bookings — Получить список всех бронирований текущего пользователя.
+	•	GET /api/bookings/{id} — Получить информацию о конкретном бронировании.
+	•	PUT /api/bookings/{id}/cancel — Отменить бронирование (пользователь или администратор).
+	•	GET /api/bookings/resource/{resourceId} — Получить все бронирования конкретного ресурса.
+
+payment-service/
+
+   	•	POST /api/payments — Оплата бронирования ресурса.
+   	•	GET /api/payments/{bookingId} — Получить информацию о платеже по ID бронирования.
+   	•	POST /api/payments/{bookingId}/cancel — Отмена платежа и бронирования.
+
+chat-service/
+
+    •	POST /api/chats — Создать новый чат с другим пользователем.
+   	•	GET /api/chats — Получить список всех чатов текущего пользователя.
+   	•	GET /api/chats/{id} — Получить сообщения в конкретном чате.
+   	•	POST /api/chats/{id}/messages — Отправить сообщение в чат.
+
+chat-service/
+	•	POST /api/notifications — Отправить уведомление пользователю.
+	•	GET /api/notifications — Получить список всех уведомлений текущего пользователя.
+	•	DELETE /api/notifications/{id} — Удалить уведомление.
+
+api-gateway/
+	•	/api/users/* — направляется в User Service.
+	•	/api/resources/* — направляется в Resource Service.
+	•	/api/bookings/* — направляется в Booking Service.
+	•	/api/payments/* — направляется в Payment Service.
