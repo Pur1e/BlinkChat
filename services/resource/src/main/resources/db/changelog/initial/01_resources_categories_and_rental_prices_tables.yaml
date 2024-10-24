@@ -1,0 +1,108 @@
+databaseChangeLog:
+  - changeSet:
+      id: add categories table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: parent_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_categories_parent_id
+                    references: categories(id)
+
+  - changeSet:
+      id: add resources table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: resources
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: location
+                  type: varchar(100)
+              - column:
+                  name: status
+                  type: varchar(30)
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_resources_category_id
+                    references: categories(id)
+                    nullable: true
+                    ### "nullable: true" ну пока что не хочу заморачиваться на счет этого
+
+
+
+  - changeSet:
+      id: add rental_prices table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: rental_prices
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  ### hourly/daily/monthly
+                  name: rent_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(8,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(3)
+              - column:
+                  name: resource_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_rental_prices_resource_id
+                    references: resources(id)
+                    nullable: false
